@@ -9,12 +9,13 @@ impl DataStack {
         }
     }
 
-    pub fn push(&mut self, u: u64) {
+    pub fn push(&mut self, u: u64) -> Result<(), String> {
         self.stack.push(u);
+        Ok(())
     }
 
-    pub fn pop(&mut self) -> Option<u64> {
-        self.stack.pop()
+    pub fn pop(&mut self) -> Result<u64, String> {
+        self.stack.pop().ok_or_else(|| "Stack underflow".to_string())
     }
 
     pub fn to_string(&self) -> String {

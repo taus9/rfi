@@ -13,9 +13,9 @@ impl BuiltIn {
         }
     }
 
-    pub fn get_func(word: &String) -> fn(&mut DataStack) {
+    pub fn get_func(word: &String) -> fn(&mut DataStack) -> Result<(), String> {
         core::get_func(word).unwrap_or_else(|| {
-            fn noop(_ds: &mut DataStack) {}
+            fn noop(_ds: &mut DataStack) -> Result<(), String> { Ok(()) }
             noop
         })
     }

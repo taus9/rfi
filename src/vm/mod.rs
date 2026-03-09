@@ -26,6 +26,8 @@ impl VM {
     }
 
     pub fn run(&mut self, input: String) {
+
+        let line_len = input.len();
         self.lexer.set_input(input);
         self.lexer.reset_pos();
 
@@ -37,16 +39,24 @@ impl VM {
                 let opcode = self.emitter.emit(word);
 
                 //TODO: check if in compile mode
-                match opcode {
-                    OpCode::NoOp => (),
+                let result = match opcode {
+                    OpCode::NoOp => Ok(()),
                     OpCode::Push(u) => self.data_stack.push(u),
-                    OpCode::Execute(func) => func(&mut self.data_stack),
-                }
+                    OpCode::Execute(func) =>  func(&mut self.data_stack),
+                };
 
+                match result {
+                    Ok(_) => self.print(line_len, "ok"),
+                    Err(msg) => println!("rfi error: {msg}"),
+                }
 
             } else {
                 break;
             }
         }
-    }    
+    }  
+
+    fn print(&self, line_len: usize, msg: &str) {
+        print!("\x1b[1A\x1b[{}C {msg}\n", "-> ".len() + line_len);
+    }  
 }

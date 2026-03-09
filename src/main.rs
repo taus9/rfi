@@ -23,6 +23,7 @@ fn main() {
             .read_line(&mut input)
             .expect("rfi - system error");
         
-        vm.run(input);
+        vm.run(input.trim().to_string());
+
     }
 }

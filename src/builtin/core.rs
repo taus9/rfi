@@ -1,25 +1,27 @@
 use crate::vm::data_stack::DataStack;
 
 // Add these after the impl block or at the top level in builtin.rs
-fn add(ds: &mut DataStack) {
-    let b = ds.pop().unwrap_or(0);
-    let a = ds.pop().unwrap_or(0);
-    ds.push(a + b);
+fn add(ds: &mut DataStack) -> Result<(), String> {
+    let b = ds.pop()?;
+    let a = ds.pop()?;
+    ds.push(a + b)?;
+    Ok(())
 }
 
-fn sub(ds: &mut DataStack) {
-    let b = ds.pop().unwrap_or(0);
-    let a = ds.pop().unwrap_or(0);
-    ds.push(a - b);
+fn sub(ds: &mut DataStack) -> Result<(), String> {
+    let b = ds.pop()?;
+    let a = ds.pop()?;
+    ds.push(a - b)?;
+    Ok(())
 }
 
-fn dot(ds: &mut DataStack) {
-    if let Some(val) = ds.pop() {
-        println!("{}", val);
-    }
+fn dot(ds: &mut DataStack) -> Result<(), String> {
+    let val = ds.pop()?;
+    print!("{}", val);
+    Ok(())
 }
 
-pub fn get_func(word: &String) -> Option<fn(&mut DataStack)> {
+pub fn get_func(word: &String) -> Option<fn(&mut DataStack) -> Result<(), String>> {
     match word.as_str() {
         "+" => Some(add),
         "-" => Some(sub),
