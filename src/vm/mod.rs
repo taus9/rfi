@@ -4,59 +4,32 @@ pub mod word;
 pub mod emitter;
 pub mod opcode;
 
-use crate::vm::lexer::Lexer;
 use crate::vm::data_stack::DataStack;
-use crate::vm::word::Word;
-use crate::vm::emitter::Emitter;
 use crate::vm::opcode::OpCode;
 
 pub struct VM {
-    lexer: Lexer,
-    data_stack: DataStack,
-    emitter: Emitter,
+    pub data_stack: DataStack,
 }
 
 impl VM {
     pub fn new() -> Self {
         Self {
-            lexer: Lexer::new(),
             data_stack: DataStack::new(),
-            emitter: Emitter::new(),
         }
     }
 
-    pub fn run(&mut self, input: String) {
+    pub fn run(&mut self, codes: Vec<OpCode>) {
+        for code in codes.iter() {
+            let result = match code {
+                OpCode::NoOp => Ok(()),
+                OpCode::Push(u) => self.data_stack.push(*u),
+                OpCode::Execute(func) =>  func(self),
+            };
 
-        let line_len = input.len();
-        self.lexer.set_input(input);
-        self.lexer.reset_pos();
-
-        loop {
-
-            if let Some(word) = self.lexer.next_word() {
-                
-                let word = Word::from(word);
-                let opcode = self.emitter.emit(word);
-
-                //TODO: check if in compile mode
-                let result = match opcode {
-                    OpCode::NoOp => Ok(()),
-                    OpCode::Push(u) => self.data_stack.push(u),
-                    OpCode::Execute(func) =>  func(&mut self.data_stack),
-                };
-
-                match result {
-                    Ok(_) => self.print(line_len, "ok"),
-                    Err(msg) => println!("rfi error: {msg}"),
-                }
-
-            } else {
-                break;
+            match result {
+                Ok(_) => println!("op good"),
+                Err(msg) => println!("rfi error: {msg}"),
             }
         }
-    }  
-
-    fn print(&self, line_len: usize, msg: &str) {
-        print!("\x1b[1A\x1b[{}C {msg}\n", "-> ".len() + line_len);
     }  
 }

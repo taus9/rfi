@@ -6,11 +6,13 @@ pub struct Emitter;
 
 impl Emitter {
 
-    pub fn new() -> Self {
-        Self{}
+    pub fn emit(words: Vec<Word>) -> Vec<OpCode> {
+        words.into_iter()
+            .map(|w| Self::transform(w))
+            .collect()
     }
 
-    pub fn emit(&self, word: Word) -> OpCode {
+    fn transform(word: Word) -> OpCode {
         match word {
             Word::Integer(u) => OpCode::Push(u),
             

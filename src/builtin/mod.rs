@@ -1,6 +1,6 @@
 pub mod core;
 
-use crate::vm::data_stack::DataStack;
+use crate::vm::VM;
 pub struct BuiltIn;
 
 impl BuiltIn {
@@ -13,9 +13,9 @@ impl BuiltIn {
         }
     }
 
-    pub fn get_func(word: &String) -> fn(&mut DataStack) -> Result<(), String> {
+    pub fn get_func(word: &String) -> fn(&mut VM) -> Result<(), String> {
         core::get_func(word).unwrap_or_else(|| {
-            fn noop(_ds: &mut DataStack) -> Result<(), String> { Ok(()) }
+            fn noop(_ds: &mut VM) -> Result<(), String> { Ok(()) }
             noop
         })
     }

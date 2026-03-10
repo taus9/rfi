@@ -18,10 +18,4 @@ impl DataStack {
         self.stack.pop().ok_or_else(|| "Stack underflow".to_string())
     }
 
-    pub fn to_string(&self) -> String {
-        self.stack.iter()
-            .map(|&x| x.to_string())
-            .collect::<Vec<String>>()
-            .join(" ")
-    }
 }

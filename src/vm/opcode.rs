@@ -1,7 +1,7 @@
-use crate::vm::data_stack::DataStack;
+use crate::vm::VM;
 
 pub enum OpCode {
     NoOp,
     Push(u64),
-    Execute(fn(&mut DataStack) -> Result<(), String>),
+    Execute(fn(&mut VM) -> Result<(), String>),
 }

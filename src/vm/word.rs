@@ -3,7 +3,7 @@ use crate::builtin::BuiltIn;
 pub enum Word {
     BuiltIn(String),
     Integer(u64),
-    Unknown(String),
+    Unknown(),
 }
 
 impl Word {
@@ -16,6 +16,6 @@ impl Word {
             return Word::Integer(value);
         }
 
-        Word::Unknown(word)
+        Word::Unknown()
     }
 }
