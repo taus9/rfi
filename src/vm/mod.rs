@@ -4,17 +4,24 @@ pub mod word;
 pub mod emitter;
 pub mod opcode;
 
+use std::io::Write;
+
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
 
 pub struct VM {
     pub data_stack: DataStack,
+    pub output: Option<String>,
+    writer: Box<dyn Write>,
 }
 
-impl VM {
-    pub fn new() -> Self {
+impl VM
+ {
+    pub fn new(writer: Box<dyn Write>) -> Self {
         Self {
             data_stack: DataStack::new(),
+            output: None,
+            writer,
         }
     }
 
@@ -26,8 +33,9 @@ impl VM {
                 OpCode::Execute(func) =>  func(self),
             };
 
+            
             match result {
-                Ok(_) => println!("op good"),
+                Ok(_) => (),
                 Err(msg) => println!("rfi error: {msg}"),
             }
         }

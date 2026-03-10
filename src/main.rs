@@ -7,18 +7,18 @@ use crate::vm::VM;
 mod builtin;
 mod vm;
 
+const INTRO: &str = "-> rusty forth interpreter <-";
+const PROMPT: &str = "-> ";
+
 fn main() {
 
-    let rfi_intro_message = String::from("-> rusty forth interpreter <-");
-    let rfi_prompt = String::from("-> ");
-
-    println!("{}", &rfi_intro_message);
+    println!("{}", &INTRO);
     
-    let mut vm = VM::new();
+    let mut vm = VM::new(Box::new(io::stdout()));
 
     loop {
         // print prompt '-> '
-        print!("{}", &rfi_prompt);
+        print!("{}", &PROMPT);
         io::stdout().flush().unwrap();
         
         // get input
