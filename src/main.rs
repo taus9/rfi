@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::{args::Args, repl::Repl, file::File};
 
 mod builtin;
@@ -43,13 +45,29 @@ fn main() {
                 DASH_F => {
                     if let Some(file) = args.next_arg() {
                         
-                        match File::run(&file) {
+                        let path = Path::new(&file);
+
+                        if !path.exists() {
+                            eprintln!("cannot find file {}", file);
+                            std::process::exit(1);
+                        }
+
+                        if !path.is_file() {
+                            eprintln!("not a valid file {}", file);
+                            std::process::exit(2);
+                        }
+
+                        match File::run(file) {
                             Ok(_) => println!("{}", COMPLETE),
-                            Err(e) => eprintln!("{}", e),
+                            Err(e) => {
+                                eprintln!("rfi error: {}", e);
+                                std::process::exit(3);
+                            }
                         }
 
                     } else {
                         eprintln!("{}", USAGE);
+                        std::process::exit(4);
                     }
                 }
 
@@ -62,7 +80,8 @@ fn main() {
                 }
 
                 _ => {
-                    println!("{} {}\n{}", UNKNOWN, arg, HELP);
+                    eprintln!("{} {}\n{}", UNKNOWN, arg, HELP);
+                    std::process::exit(5);
                 }
             }
         }
@@ -70,4 +89,3 @@ fn main() {
     }
    
 }
-
