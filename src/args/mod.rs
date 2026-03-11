@@ -21,4 +21,8 @@ impl Args {
 
         return Some(self.args[self.pos - 1].to_string());
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.args.is_empty()
+    }
 }
