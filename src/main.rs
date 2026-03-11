@@ -18,7 +18,15 @@ const OK: &str = "ok";
 
 fn main() {
 
-    println!("{}", INTRO);
+
+
+    println!("{}", INTRO);let args: Vec<String> = std::env::args().skip(1).collect();
+    
+    for arg in &args {
+        println!("{}", arg);
+    }
+
+
     println!("{}", PROMPT);
 
     let mut vm = VM::new(Box::new(io::stdout()));
@@ -70,6 +78,7 @@ fn read_input() -> String {
             match code {
                 KeyCode::Enter => break,
                 KeyCode::Char('c') if modifiers.contains(KeyModifiers::CONTROL) => {
+                    println!("\x08\x08\x08");
                     terminal::disable_raw_mode().unwrap();
                     std::process::exit(0);
                 },
