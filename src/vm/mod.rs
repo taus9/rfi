@@ -25,7 +25,7 @@ impl VM
         }
     }
 
-    pub fn run(&mut self, codes: Vec<OpCode>) {
+    pub fn run(&mut self, codes: Vec<OpCode>) -> Result<(), String> {
         for code in codes.iter() {
             let result = match code {
                 OpCode::NoOp => Ok(()),
@@ -33,11 +33,19 @@ impl VM
                 OpCode::Execute(func) =>  func(self),
             };
 
-            
             match result {
-                Ok(_) => (),
-                Err(msg) => println!("rfi error: {msg}"),
+                Ok(_) => {
+                    // self.output is only set by builtin functions
+                    if let Some(o) = &self.output {
+                        write!(self.writer, " {}", &o).unwrap();
+                        self.output = None;
+                    }
+                }
+                
+                Err(msg) => return Err(msg),
             }
-        }
+        };
+
+        Ok(())
     }  
 }

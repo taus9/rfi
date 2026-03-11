@@ -1,3 +1,6 @@
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::terminal;
+
 use std::io::{self, Write};
 
 use crate::vm::lexer::Lexer;
@@ -9,6 +12,9 @@ mod vm;
 
 const INTRO: &str = "-> rusty forth interpreter <-";
 const PROMPT: &str = "-> ";
+const QUIT: &str = "quit";
+const ERROR: &str = "rfi error: ";
+
 
 fn main() {
 
@@ -22,11 +28,12 @@ fn main() {
         io::stdout().flush().unwrap();
         
         // get input
-        let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("rfi - system error");
-        
+        let input = read_input();
+
+        // TODO: make quit into an OpCode
+        if input == QUIT {
+            break;
+        }
         
         // get words from lexer
         let words = Lexer::tokenize(input);
@@ -38,7 +45,46 @@ fn main() {
         let codes = Emitter::emit(words);
 
         // run opcodes in vm
-        vm.run(codes);
-        
+        match vm.run(codes) {
+            Ok(()) => {
+                print!(" ok\n");
+                io::stdout().flush().unwrap();
+            }
+            Err(msg) => println!("\n{}{}", ERROR, msg),
+        }
     }
+    println!();
+}
+
+fn read_input() -> String {
+    let mut input = String::new();
+    terminal::enable_raw_mode().unwrap();
+
+    loop {
+        if let Event::Key(KeyEvent { code, modifiers, .. }) = event::read().unwrap() {
+            match code {
+                KeyCode::Enter => break,
+                KeyCode::Char('c') if modifiers.contains(KeyModifiers::CONTROL) => {
+                    terminal::disable_raw_mode().unwrap();
+                    std::process::exit(0);
+                },
+                KeyCode::Char(c) => {
+                    input.push(c);
+                    print!("{}", c);
+                    io::stdout().flush().unwrap();
+                },
+                KeyCode::Backspace => {
+                    if !input.is_empty() {
+                        input.pop();
+                        print!("\x08 \x08"); // move back, erase, move back
+                        io::stdout().flush().unwrap();
+                    }
+                },
+                _ => {},
+            }
+        }
+    }
+    terminal::disable_raw_mode().unwrap();
+
+    input
 }

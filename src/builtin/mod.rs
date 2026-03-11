@@ -1,6 +1,5 @@
 pub mod core;
 
-use std::io::Write;
 use crate::vm::VM;
 pub struct BuiltIn;
 
