@@ -14,12 +14,20 @@ const DASH_F: &str = "-f";
 const DASH_H: &str = "-h";
 const DASH_V: &str = "-v";
 
-const COMPLETE: &str = "-> program complete <-";
-const USAGE: &str = "Usage: rfi -f [filename]";
-const UNKNOWN: &str = "Unknown command:";
-const HELP: &str = "Use -h to get help";
+const EXIT_FILE_NOT_FOUND: i32 = 1;
+const EXIT_MISSING_ARG: i32    = 4;
+const EXIT_NOT_A_FILE: i32     = 2;
+const EXIT_RUNTIME_ERROR: i32  = 3;
+const EXIT_UNKNOWN_ARG: i32    = 5;
 
-const HELP_TEXT: &str = "\
+const ERR_FILE_NOT_FOUND: &str = "file not found";
+const ERR_MISSING_ARG: &str = "missing filename arg";
+const ERR_NOT_A_FILE: &str = "not a valid file";
+const ERR_RUNTIME_ERROR: &str = "rfi error:";
+const ERR_UNKNOWN_ARG: &str = "Unknown command:";
+
+const TXT_COMPLETE: &str = "-> program complete <-";
+const TXT_HELP: &str = "\
 Usage: rfi [options]
 
   -f <file>  Run a file
@@ -48,31 +56,31 @@ fn main() {
                         let path = Path::new(&file);
 
                         if !path.exists() {
-                            eprintln!("cannot find file {}", file);
-                            std::process::exit(1);
+                            eprintln!("{} {}", ERR_FILE_NOT_FOUND, file);
+                            std::process::exit(EXIT_FILE_NOT_FOUND);
                         }
 
                         if !path.is_file() {
-                            eprintln!("not a valid file {}", file);
-                            std::process::exit(2);
+                            eprintln!("{} {}", ERR_NOT_A_FILE, file);
+                            std::process::exit(EXIT_NOT_A_FILE);
                         }
 
                         match File::run(file) {
-                            Ok(_) => println!("{}", COMPLETE),
-                            Err(e) => {
-                                eprintln!("rfi error: {}", e);
-                                std::process::exit(3);
+                            Ok(_) => println!("{}", TXT_COMPLETE),
+                            Err(message) => {
+                                eprintln!("{} {}", ERR_RUNTIME_ERROR, message);
+                                std::process::exit(EXIT_RUNTIME_ERROR);
                             }
                         }
 
                     } else {
-                        eprintln!("{}", USAGE);
-                        std::process::exit(4);
+                        eprintln!("{}", ERR_MISSING_ARG);
+                        std::process::exit(EXIT_MISSING_ARG);
                     }
                 }
 
                 DASH_H => {
-                    println!("{}", HELP_TEXT);
+                    println!("{}", TXT_HELP);
                 }
 
                 DASH_V => {
@@ -80,8 +88,8 @@ fn main() {
                 }
 
                 _ => {
-                    eprintln!("{} {}\n{}", UNKNOWN, arg, HELP);
-                    std::process::exit(5);
+                    eprintln!("{} {}", ERR_UNKNOWN_ARG, arg);
+                    std::process::exit(EXIT_UNKNOWN_ARG);
                 }
             }
         }
