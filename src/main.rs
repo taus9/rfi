@@ -36,8 +36,11 @@ Usage: rfi [options]
 
   If no arguments are provided, the interactive REPL will start.";
 
+struct ERROR(String, i32);
+
 fn main() {
 
+    // get command line arguments
     let args: Vec<String> = std::env::args().skip(1).collect();
     let mut args = Args::new(args);
     
@@ -53,17 +56,10 @@ fn main() {
                 DASH_F => {
                     if let Some(file) = args.next_arg() {
                         
-                        let path = Path::new(&file);
-
-                        if !path.exists() {
-                            eprintln!("{} {}", ERR_FILE_NOT_FOUND, file);
-                            std::process::exit(EXIT_FILE_NOT_FOUND);
-                        }
-
-                        if !path.is_file() {
-                            eprintln!("{} {}", ERR_NOT_A_FILE, file);
-                            std::process::exit(EXIT_NOT_A_FILE);
-                        }
+                        validate_file(&file).unwrap_or_else(|err| {
+                            eprintln!("{} {}", err.0, file);
+                            std::process::exit(err.1);
+                        });
 
                         match File::run(file) {
                             Ok(_) => println!("{}", TXT_COMPLETE),
@@ -96,4 +92,21 @@ fn main() {
 
     }
    
+}
+
+
+fn validate_file(file: &str) -> Result<(), ERROR> {
+    let path = Path::new(&file);
+
+    if !path.exists() {
+        let error = ERROR(ERR_FILE_NOT_FOUND.to_string(), EXIT_FILE_NOT_FOUND);
+        return Err(error);
+    }
+
+    if !path.is_file() {
+        let error = ERROR(ERR_NOT_A_FILE.to_string(), EXIT_NOT_A_FILE);
+        return Err(error);
+    }
+
+    Ok(())
 }
