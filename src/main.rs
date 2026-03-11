@@ -3,12 +3,15 @@ use crossterm::terminal;
 
 use std::io::{self, Write};
 
+use crate::args::Args;
+
 use crate::vm::lexer::Lexer;
 use crate::vm::emitter::Emitter;
 use crate::vm::VM;
 
 mod builtin;
 mod vm;
+mod args;
 
 const INTRO: &str = "->   rusty forth interpreter 0.1.0   <-\n-> type quit or press ctrl+c to exit <-";
 const PROMPT: &str = "-> ";
@@ -16,57 +19,73 @@ const QUIT: &str = "quit";
 const ERROR: &str = "rfi error: ";
 const OK: &str = "ok";
 
+const RUN_FILE: &str = "-f";
+
 fn main() {
 
-
-
-    println!("{}", INTRO);let args: Vec<String> = std::env::args().skip(1).collect();
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let mut args = Args::new(args);
     
-    for arg in &args {
-        println!("{}", arg);
-    }
+    // start the repl
+    if args.is_empty() {
 
+        println!("{}", INTRO);
 
-    println!("{}", PROMPT);
+        println!("{}", PROMPT);
 
-    let mut vm = VM::new(Box::new(io::stdout()));
+        let mut vm = VM::new(Box::new(io::stdout()));
 
-    loop {
-        // print prompt '-> '
-        print!("{}", PROMPT);
-        io::stdout().flush().unwrap();
-        
-        // get input
-        let input = read_input();
+        loop {
+            // print prompt '-> '
+            print!("{}", PROMPT);
+            io::stdout().flush().unwrap();
 
-        if input.trim() == "" {
-            println!();
-        }
+            // get input
+            let input = read_input();
 
-        // TODO: make quit into an OpCode
-        if input == QUIT {
-            break;
-        }
-        
-        // get words from lexer
-        let words = Lexer::tokenize(input);
-        if words.is_empty() {
-            continue;
-        }
-
-        // emit opcodes from words
-        let codes = Emitter::emit(words);
-
-        // run opcodes in vm
-        match vm.run(codes) {
-            Ok(()) => {
-                print!(" {}\n", OK);
-                io::stdout().flush().unwrap();
+            if input.trim() == "" {
+                println!();
             }
-            Err(msg) => println!("\n{}{}", ERROR, msg),
+
+            // TODO: make quit into an OpCode
+            if input == QUIT {
+                break;
+            }
+
+            // get words from lexer
+            let words = Lexer::tokenize(input);
+            if words.is_empty() {
+                continue;
+            }
+
+            // emit opcodes from words
+            let codes = Emitter::emit(words);
+
+            // run opcodes in vm
+            match vm.run(codes) {
+                Ok(()) => {
+                    print!(" {}\n", OK);
+                    io::stdout().flush().unwrap();
+                }
+                Err(msg) => println!("\n{}{}", ERROR, msg),
+            }
         }
+        println!();
+    } else {
+
+        while let Some(arg) =  args.next_arg() {
+            match arg.as_str() {
+                RUN_FILE => {
+                    println!("run file!");
+                }
+                _ => {
+                    println!("unknown command '{}'", arg);
+                }
+            }
+        }
+
     }
-    println!();
+   
 }
 
 fn read_input() -> String {
