@@ -10,7 +10,7 @@ use crate::vm::VM;
 mod builtin;
 mod vm;
 
-const INTRO: &str = "-> rusty forth interpreter <-";
+const INTRO: &str = "->   rusty forth interpreter 0.1.0   <-\n-> type quit or press ctrl+c to exit <-";
 const PROMPT: &str = "-> ";
 const QUIT: &str = "quit";
 const ERROR: &str = "rfi error: ";
