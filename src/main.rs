@@ -14,21 +14,26 @@ const INTRO: &str = "->   rusty forth interpreter 0.1.0   <-\n-> type quit or pr
 const PROMPT: &str = "-> ";
 const QUIT: &str = "quit";
 const ERROR: &str = "rfi error: ";
-
+const OK: &str = "ok";
 
 fn main() {
 
-    println!("{}", &INTRO);
-    
+    println!("{}", INTRO);
+    println!("{}", PROMPT);
+
     let mut vm = VM::new(Box::new(io::stdout()));
 
     loop {
         // print prompt '-> '
-        print!("{}", &PROMPT);
+        print!("{}", PROMPT);
         io::stdout().flush().unwrap();
         
         // get input
         let input = read_input();
+
+        if input.trim() == "" {
+            println!();
+        }
 
         // TODO: make quit into an OpCode
         if input == QUIT {
@@ -47,7 +52,7 @@ fn main() {
         // run opcodes in vm
         match vm.run(codes) {
             Ok(()) => {
-                print!(" ok\n");
+                print!(" {}\n", OK);
                 io::stdout().flush().unwrap();
             }
             Err(msg) => println!("\n{}{}", ERROR, msg),
