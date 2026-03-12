@@ -1,8 +1,8 @@
 pub mod core;
 
-use crate::vm::VM;
+use crate::vm::Vm;
 
-pub type BuiltInFn = fn(&mut VM) -> Result<(), String>;
+pub type BuiltInFn = fn(&mut Vm) -> Result<(), String>;
 
 pub struct BuiltIn;
 

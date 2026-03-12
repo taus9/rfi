@@ -3,7 +3,7 @@ use std::io::{BufRead, BufReader};
 
 use crate::vm::lexer::Lexer;
 use crate::vm::emitter::Emitter;
-use crate::vm::VM;
+use crate::vm::Vm;
 
 const MSG_ERROR: &str = "rfi error:";
 
@@ -14,7 +14,7 @@ impl File {
     pub fn run(file: String) -> Result<(), String> {
         let lines = Self::read_file(&file)?;
 
-        let mut vm = VM::new();
+        let mut vm = Vm::new();
 
         for line in &lines {
             // get words from lexer

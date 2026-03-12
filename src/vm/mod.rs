@@ -7,12 +7,13 @@ pub mod opcode;
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
 
-pub struct VM {
+pub struct Vm {
     pub data_stack: DataStack,
     pub output: String,
 }
 
-impl VM {
+
+impl Vm {
     pub fn new() -> Self {
         Self {
             data_stack: DataStack::new(),

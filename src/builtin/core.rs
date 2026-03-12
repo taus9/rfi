@@ -1,21 +1,21 @@
-use crate::{builtin::BuiltInFn, vm::VM};
+use crate::{builtin::BuiltInFn, vm::Vm};
 
 
-fn add(vm: &mut VM) -> Result<(), String> {
+fn add(vm: &mut Vm) -> Result<(), String> {
     let b = vm.data_stack.pop()?;
     let a = vm.data_stack.pop()?;
     vm.data_stack.push(a + b)?;
     Ok(())
 }
 
-fn sub(vm: &mut VM) -> Result<(), String> {
+fn sub(vm: &mut Vm) -> Result<(), String> {
     let b = vm.data_stack.pop()?;
     let a = vm.data_stack.pop()?;
     vm.data_stack.push(a - b)?;
     Ok(())
 }
 
-fn dot(vm: &mut VM) -> Result<(), String> {
+fn dot(vm: &mut Vm) -> Result<(), String> {
     let val = vm.data_stack.pop()?;
     vm.output.push_str(&format!(" {}", val));
     Ok(())

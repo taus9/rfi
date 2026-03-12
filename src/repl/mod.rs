@@ -5,7 +5,7 @@ use std::io::{self, Write};
 
 use crate::vm::lexer::Lexer;
 use crate::vm::emitter::Emitter;
-use crate::vm::VM;
+use crate::vm::Vm;
 
 pub struct Repl;
 
@@ -24,7 +24,7 @@ impl Repl {
 
         println!("{}", PROMPT);
 
-        let mut vm = VM::new();
+        let mut vm = Vm::new();
 
         loop {
             // print prompt '-> '
