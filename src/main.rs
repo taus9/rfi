@@ -7,6 +7,7 @@ mod vm;
 mod args;
 mod repl;
 mod file;
+mod runner;
 
 const RFI_VERSION: &str = "rusty forth interpreter 0.1.0";
 
@@ -20,11 +21,11 @@ const EXIT_NOT_A_FILE: i32     = 2;
 const EXIT_RUNTIME_ERROR: i32  = 3;
 const EXIT_UNKNOWN_ARG: i32    = 5;
 
-const ERR_FILE_NOT_FOUND: &str = "file not found";
-const ERR_MISSING_ARG: &str = "missing filename arg";
-const ERR_NOT_A_FILE: &str = "not a valid file";
+const ERR_FILE_NOT_FOUND: &str = "file not found:";
+const ERR_MISSING_ARG: &str = "missing filename arg:";
+const ERR_NOT_A_FILE: &str = "not a valid file:";
 const ERR_RUNTIME_ERROR: &str = "rfi error:";
-const ERR_UNKNOWN_ARG: &str = "Unknown command:";
+const ERR_UNKNOWN_ARG: &str = "unknown command:";
 
 const TXT_COMPLETE: &str = "-> program complete <-";
 const TXT_HELP: &str = "\
@@ -36,7 +37,7 @@ Usage: rfi [options]
 
   If no arguments are provided, the interactive REPL will start.";
 
-struct ERROR(String, i32);
+struct RfiError(String, i32);
 
 fn main() {
 
@@ -55,7 +56,7 @@ fn main() {
             match arg.as_str() {
                 DASH_F => {
                     if let Some(file) = args.next_arg() {
-                        
+
                         validate_file(&file).unwrap_or_else(|err| {
                             eprintln!("{} {}", err.0, file);
                             std::process::exit(err.1);
@@ -95,16 +96,16 @@ fn main() {
 }
 
 
-fn validate_file(file: &str) -> Result<(), ERROR> {
+fn validate_file(file: &str) -> Result<(), RfiError> {
     let path = Path::new(&file);
 
     if !path.exists() {
-        let error = ERROR(ERR_FILE_NOT_FOUND.to_string(), EXIT_FILE_NOT_FOUND);
+        let error = RfiError(ERR_FILE_NOT_FOUND.to_string(), EXIT_FILE_NOT_FOUND);
         return Err(error);
     }
 
     if !path.is_file() {
-        let error = ERROR(ERR_NOT_A_FILE.to_string(), EXIT_NOT_A_FILE);
+        let error = RfiError(ERR_NOT_A_FILE.to_string(), EXIT_NOT_A_FILE);
         return Err(error);
     }
 
