@@ -22,7 +22,9 @@ impl VM {
 
     pub fn run(&mut self, codes: Vec<OpCode>) -> Result<(), String> {
 
-        self.output = String::new();
+        if !self.output.is_empty() {
+            self.output = String::new();
+        }
 
         for code in codes.iter(){
             match code {
