@@ -16,7 +16,7 @@ const QUIT: &str = "quit";
 
 impl Repl {
 
-    pub fn run(&self) {
+    pub fn start() {
         println!("{}", INTRO);
 
         println!("{}", PROMPT);
