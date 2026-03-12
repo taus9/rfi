@@ -6,7 +6,7 @@ use crate::vm::lexer::Lexer;
 use crate::vm::emitter::Emitter;
 use crate::vm::VM;
 
-const MSG_ERROR: &str = "rfi error: ";
+const MSG_ERROR: &str = "rfi error:";
 
 
 pub struct File;
@@ -31,10 +31,10 @@ impl File {
             // run opcodes in vm
             match vm.run(codes) {
                 Ok(()) => (),
-                Err(msg) => println!("\n{}{}", MSG_ERROR, msg),
+                Err(msg) => println!("\n{} {}", MSG_ERROR, msg),
             }
-        }   
-
+        }
+        
         Ok(())
     }
 

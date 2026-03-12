@@ -26,7 +26,6 @@ const ERR_NOT_A_FILE: &str = "not a valid file:";
 const ERR_RUNTIME_ERROR: &str = "rfi error:";
 const ERR_UNKNOWN_ARG: &str = "unknown command:";
 
-const TXT_COMPLETE: &str = "-> program complete <-";
 const TXT_HELP: &str = "\
 Usage: rfi [options]
 
@@ -62,7 +61,7 @@ fn main() {
                         });
 
                         match File::run(file) {
-                            Ok(_) => println!("\n{}", TXT_COMPLETE),
+                            Ok(_) => (),
                             Err(message) => {
                                 eprintln!("{} {}", ERR_RUNTIME_ERROR, message);
                                 std::process::exit(EXIT_RUNTIME_ERROR);
