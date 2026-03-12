@@ -21,6 +21,9 @@ impl VM {
     }
 
     pub fn run(&mut self, codes: Vec<OpCode>) -> Result<(), String> {
+
+        self.output = String::new();
+
         for code in codes.iter(){
             match code {
                 OpCode::NoOp => {}
@@ -28,7 +31,7 @@ impl VM {
                 OpCode::Execute(func) =>  func(self)?,
             }
         }
-        
+
         Ok(())
     }  
 }

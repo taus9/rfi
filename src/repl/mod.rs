@@ -55,6 +55,9 @@ impl Repl {
             // run opcodes in vm
             match vm.run(codes) {
                 Ok(()) => {
+                    if !vm.output.is_empty() {
+                        print!("{}", &vm.output);
+                    }
                     print!(" {}\n", MSG_OK);
                     io::stdout().flush().unwrap();
                 }
