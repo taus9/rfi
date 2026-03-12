@@ -28,7 +28,6 @@ impl VM {
 
         for code in codes.iter(){
             match code {
-                OpCode::NoOp => {}
                 OpCode::Push(u) => self.data_stack.push(*u)?,
                 OpCode::Execute(func) =>  func(self)?,
                 OpCode::NotFound(s) => return Err(format!("{} not found", s)),
