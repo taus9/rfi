@@ -24,7 +24,7 @@ impl Repl {
 
         println!("{}", PROMPT);
 
-        let mut vm = VM::new(Box::new(io::stdout()));
+        let mut vm = VM::new();
 
         loop {
             // print prompt '-> '

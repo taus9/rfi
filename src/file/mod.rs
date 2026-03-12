@@ -1,5 +1,4 @@
 use std::fs;
-use std::io;
 use std::io::{BufRead, BufReader};
 
 use crate::vm::lexer::Lexer;
@@ -15,7 +14,7 @@ impl File {
     pub fn run(file: String) -> Result<(), String> {
         let lines = Self::read_file(&file)?;
 
-        let mut vm = VM::new(Box::new(io::stdout()));
+        let mut vm = VM::new();
 
         for line in &lines {
             // get words from lexer

@@ -16,7 +16,7 @@ fn sub(vm: &mut VM) -> Result<(), String> {
 
 fn dot(vm: &mut VM) -> Result<(), String> {
     let val = vm.data_stack.pop()?;
-    vm.output = Some(val.to_string());
+    vm.output.push_str(&format!(" {}", val));
     Ok(())
 }
 
