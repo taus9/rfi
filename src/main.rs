@@ -7,7 +7,6 @@ mod vm;
 mod args;
 mod repl;
 mod file;
-mod runner;
 
 const RFI_VERSION: &str = "rusty forth interpreter 0.1.0";
 
@@ -63,7 +62,7 @@ fn main() {
                         });
 
                         match File::run(file) {
-                            Ok(_) => println!("{}", TXT_COMPLETE),
+                            Ok(_) => println!("\n{}", TXT_COMPLETE),
                             Err(message) => {
                                 eprintln!("{} {}", ERR_RUNTIME_ERROR, message);
                                 std::process::exit(EXIT_RUNTIME_ERROR);

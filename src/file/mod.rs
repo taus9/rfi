@@ -2,8 +2,12 @@ use std::fs;
 use std::io;
 use std::io::{BufRead, BufReader};
 
+use crate::vm::lexer::Lexer;
+use crate::vm::emitter::Emitter;
 use crate::vm::VM;
-use crate::runner::Runner;
+
+const MSG_ERROR: &str = "rfi error: ";
+
 
 pub struct File;
 
@@ -13,10 +17,22 @@ impl File {
         let lines = Self::read_file(&file)?;
 
         let mut vm = VM::new(Box::new(io::stdout()));
-        let mut runner = Runner::new(&mut vm);
 
         for line in &lines {
-            runner.run(line);
+            // get words from lexer
+            let words = Lexer::tokenize(line);
+            if words.is_empty() {
+                continue;
+            }
+
+            // emit opcodes from words
+            let codes = Emitter::emit(words);
+
+            // run opcodes in vm
+            match vm.run(codes) {
+                Ok(()) => (),
+                Err(msg) => println!("\n{}{}", MSG_ERROR, msg),
+            }
         }   
 
         Ok(())

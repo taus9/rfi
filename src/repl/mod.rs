@@ -3,16 +3,19 @@ use crossterm::terminal;
 
 use std::io::{self, Write};
 
+use crate::vm::lexer::Lexer;
+use crate::vm::emitter::Emitter;
 use crate::vm::VM;
-use crate::runner::Runner;
-
-
 
 pub struct Repl;
 
 const INTRO: &str = "->   rusty forth interpreter 0.1.0   <-\n-> type quit or press ctrl+c to exit <-";
 const PROMPT: &str = "-> ";
 const QUIT: &str = "quit";
+
+const MSG_ERROR: &str = "rfi error: ";
+const MSG_OK: &str = "ok";
+
 
 impl Repl {
 
@@ -22,7 +25,6 @@ impl Repl {
         println!("{}", PROMPT);
 
         let mut vm = VM::new(Box::new(io::stdout()));
-        let mut runner = Runner::new(&mut vm);
 
         loop {
             // print prompt '-> '
@@ -41,8 +43,23 @@ impl Repl {
                 break;
             }
 
-            runner.run(&input);
+            // get words from lexer
+            let words = Lexer::tokenize(&input);
+            if words.is_empty() {
+                return;
+            }
 
+            // emit opcodes from words
+            let codes = Emitter::emit(words);
+
+            // run opcodes in vm
+            match vm.run(codes) {
+                Ok(()) => {
+                    print!(" {}\n", MSG_OK);
+                    io::stdout().flush().unwrap();
+                }
+                Err(msg) => println!("\n{}{}", MSG_ERROR, msg),
+            }
         }
         println!();
     }
