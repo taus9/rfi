@@ -1,8 +1,7 @@
-use crate::builtin::BuiltIn;
-use crate::vm::VM;
+use crate::builtin::{BuiltIn, BuiltInFn};
 
 pub enum Word {
-    BuiltIn(fn(&mut VM) -> Result<(), String>),
+    BuiltIn(BuiltInFn),
     Integer(u64),
     Unknown(),
 }

@@ -1,4 +1,5 @@
-use crate::vm::VM;
+use crate::{builtin::BuiltInFn, vm::VM};
+
 
 fn add(vm: &mut VM) -> Result<(), String> {
     let b = vm.data_stack.pop()?;
@@ -20,7 +21,7 @@ fn dot(vm: &mut VM) -> Result<(), String> {
     Ok(())
 }
 
-pub fn get_func(word: &str) -> Option<fn(&mut VM) -> Result<(), String>> {
+pub fn get_func(word: &str) -> Option<BuiltInFn> {
     match word {
         "+" => Some(add),
         "-" => Some(sub),

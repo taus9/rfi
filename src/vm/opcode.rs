@@ -1,7 +1,7 @@
-use crate::vm::VM;
+use crate::builtin::BuiltInFn;
 
 pub enum OpCode {
     NoOp,
     Push(u64),
-    Execute(fn(&mut VM) -> Result<(), String>),
+    Execute(BuiltInFn),
 }
