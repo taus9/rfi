@@ -8,7 +8,6 @@ use crate::vm::VM;
 
 const MSG_ERROR: &str = "rfi error:";
 
-
 pub struct File;
 
 impl File {
@@ -34,7 +33,7 @@ impl File {
                 Err(msg) => println!("\n{} {}", MSG_ERROR, msg),
             }
         }
-        
+
         Ok(())
     }
 

@@ -13,7 +13,7 @@ const INTRO: &str = "->   rusty forth interpreter 0.1.0   <-\n-> type quit or pr
 const PROMPT: &str = "-> ";
 const QUIT: &str = "quit";
 
-const MSG_ERROR: &str = "rfi error: ";
+const MSG_ERROR: &str = "rfi error:";
 const MSG_OK: &str = "ok";
 
 
@@ -58,7 +58,7 @@ impl Repl {
                     print!(" {}\n", MSG_OK);
                     io::stdout().flush().unwrap();
                 }
-                Err(msg) => println!("\n{}{}", MSG_ERROR, msg),
+                Err(msg) => println!("\n{} {}", MSG_ERROR, msg),
             }
         }
         println!();
