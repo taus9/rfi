@@ -3,7 +3,7 @@ use crate::builtin::{BuiltIn, BuiltInFn};
 pub enum Word {
     BuiltIn(BuiltInFn),
     Integer(u64),
-    Unknown(),
+    NotFound(String),
 }
 
 impl Word {
@@ -16,6 +16,6 @@ impl Word {
             return Word::Integer(value);
         }
 
-        Word::Unknown()
+        Word::NotFound(word)
     }
 }

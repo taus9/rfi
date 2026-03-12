@@ -4,4 +4,5 @@ pub enum OpCode {
     NoOp,
     Push(u64),
     Execute(BuiltInFn),
+    NotFound(String),
 }

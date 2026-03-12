@@ -15,8 +15,7 @@ impl Emitter {
         match word {
             Word::Integer(u) => OpCode::Push(u),
             Word::BuiltIn(f) => OpCode::Execute(f),
-            _ => OpCode::NoOp,
-
+            Word::NotFound(s) =>OpCode::NotFound(s),
         }
     }
 }
