@@ -15,8 +15,7 @@ pub struct VM {
     writer: Box<dyn Write>,
 }
 
-impl VM
- {
+impl VM {
     pub fn new(writer: Box<dyn Write>) -> Self {
         Self {
             data_stack: DataStack::new(),
