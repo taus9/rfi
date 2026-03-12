@@ -3,8 +3,7 @@ use crate::vm::word::Word;
 pub struct Lexer;
 
 impl Lexer {
-
-    pub fn tokenize(input: String) -> Vec<Word> {
+    pub fn tokenize(input: &str) -> Vec<Word> {
         let bytes = input.as_bytes();
         let mut pos = 0;
         let mut words = Vec::<Word>::new();
