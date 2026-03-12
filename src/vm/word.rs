@@ -1,15 +1,16 @@
 use crate::builtin::BuiltIn;
+use crate::vm::VM;
 
 pub enum Word {
-    BuiltIn(String),
+    BuiltIn(fn(&mut VM) -> Result<(), String>),
     Integer(u64),
     Unknown(),
 }
 
 impl Word {
     pub fn from(word: String) -> Self {
-        if BuiltIn::is_builtin(&word) {
-            return Word::BuiltIn(word);
+        if let Some(func) = BuiltIn::get_func(&word) {
+            return Word::BuiltIn(func);
         }
 
         if let Ok(value) = word.parse::<u64>() {

@@ -1,6 +1,5 @@
 use crate::vm::word::Word;
 use crate::vm::opcode::OpCode;
-use crate::builtin::BuiltIn;
 
 pub struct Emitter;
 
@@ -15,16 +14,10 @@ impl Emitter {
     fn transform(word: Word) -> OpCode {
         match word {
             Word::Integer(u) => OpCode::Push(u),
-            
-            Word::BuiltIn(w) => {
-                let func = BuiltIn::get_func(&w);
-                OpCode::Execute(func)
-            },
-
+            Word::BuiltIn(f) => OpCode::Execute(f),
             _ => OpCode::NoOp,
 
         }
     }
-
 }
 

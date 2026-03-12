@@ -20,8 +20,8 @@ fn dot(vm: &mut VM) -> Result<(), String> {
     Ok(())
 }
 
-pub fn get_func(word: &String) -> Option<fn(&mut VM) -> Result<(), String>> {
-    match word.as_str() {
+pub fn get_func(word: &str) -> Option<fn(&mut VM) -> Result<(), String>> {
+    match word {
         "+" => Some(add),
         "-" => Some(sub),
         "." => Some(dot),
