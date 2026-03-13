@@ -8,6 +8,11 @@ fn colon(vm: &mut Vm) -> Result<(), String> {
     Ok(())
 }
 
+fn semicolon(vm: &mut Vm) -> Result<(), String> {
+    vm.mode = VmMode::Interpret;
+    Ok(())
+}
+
 fn add(vm: &mut Vm) -> Result<(), String> {
     let b = vm.data_stack.pop()?;
     let a = vm.data_stack.pop()?;
@@ -34,6 +39,7 @@ pub fn get(word: &str) -> Option<BuiltIn> {
         "-" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: sub }),
         "." => Some(BuiltIn { flags: BuiltInFlags::NONE, func: dot }),
         ":" => Some(BuiltIn { flags: BuiltInFlags::IMMEDIATE, func: colon }),
+        ";" => Some(BuiltIn { flags: BuiltInFlags::IMMEDIATE, func: semicolon }),
         _ => None,  // Fallback for unknown builtins
     }
 }

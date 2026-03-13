@@ -4,6 +4,7 @@ pub mod word;
 pub mod emitter;
 pub mod opcode;
 
+use crate::builtin::{BuiltIn, BuiltInFlags};
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
 
@@ -37,8 +38,14 @@ impl Vm {
 
             match self.mode {
                 VmMode::Compile => {
-                    // In compile mode, we would typically store the code for later execution
-                    // For simplicity, we'll just print it here
+                    
+                    if let OpCode::ExecuteBuiltIn(bi) = code {
+                        if bi.flags.has(BuiltInFlags::IMMEDIATE) {
+                            (bi.func)(self)?;
+                            continue;
+                        }
+                    }
+
                     println!("Compiled: {:?}", code);
                     continue;
                 },
@@ -51,7 +58,7 @@ impl Vm {
                     }
                 },
             };
-            
+
         }
 
         Ok(())
