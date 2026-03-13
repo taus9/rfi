@@ -4,7 +4,9 @@ pub mod word;
 pub mod emitter;
 pub mod opcode;
 
-use crate::builtin::{BuiltIn, BuiltInFlags};
+use std::f32::consts::E;
+
+use crate::builtin::{BuiltInFlags};
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
 
@@ -40,6 +42,10 @@ impl Vm {
                 VmMode::Compile => {
                     
                     if let OpCode::ExecuteBuiltIn(bi) = code {
+                        if bi.flags.has(BuiltInFlags::DEFINING) {
+                            return Err("nested definitions are not supported".to_string());
+                        }
+
                         if bi.flags.has(BuiltInFlags::IMMEDIATE) {
                             (bi.func)(self)?;
                             continue;

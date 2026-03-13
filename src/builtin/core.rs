@@ -38,7 +38,7 @@ pub fn get(word: &str) -> Option<BuiltIn> {
         "+" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: add }),
         "-" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: sub }),
         "." => Some(BuiltIn { flags: BuiltInFlags::NONE, func: dot }),
-        ":" => Some(BuiltIn { flags: BuiltInFlags::IMMEDIATE, func: colon }),
+        ":" => Some(BuiltIn { flags: BuiltInFlags::DEFINING, func: colon }),
         ";" => Some(BuiltIn { flags: BuiltInFlags::IMMEDIATE, func: semicolon }),
         _ => None,  // Fallback for unknown builtins
     }
