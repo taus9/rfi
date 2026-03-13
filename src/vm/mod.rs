@@ -34,11 +34,24 @@ impl Vm {
         }
 
         for code in codes.iter(){
-            match code {
-                OpCode::Push(u) => self.data_stack.push(*u)?,
-                OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
-                OpCode::NotFound(s) => return Err(format!("{} not found", s)),
-            }
+
+            match self.mode {
+                VmMode::Compile => {
+                    // In compile mode, we would typically store the code for later execution
+                    // For simplicity, we'll just print it here
+                    println!("Compiled: {:?}", code);
+                    continue;
+                },
+
+                VmMode::Interpret => {
+                    match code {
+                        OpCode::Push(u) => self.data_stack.push(*u)?,
+                        OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
+                        OpCode::NotFound(s) => return Err(format!("{} not found", s)),
+                    }
+                },
+            };
+            
         }
 
         Ok(())
