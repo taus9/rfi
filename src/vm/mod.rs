@@ -42,9 +42,7 @@ impl Vm {
                     if let OpCode::ExecuteBuiltIn(bi) = code {
                         if bi.flags.has(BuiltInFlags::DEFINING) {
                             return Err("nested definitions are not supported".to_string());
-                        }
-
-                        if bi.flags.has(BuiltInFlags::IMMEDIATE) {
+                        } else if bi.flags.has(BuiltInFlags::IMMEDIATE) {
                             (bi.func)(self)?;
                             continue;
                         }
