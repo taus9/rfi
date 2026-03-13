@@ -4,8 +4,6 @@ pub mod word;
 pub mod emitter;
 pub mod opcode;
 
-use std::f32::consts::E;
-
 use crate::builtin::{BuiltInFlags};
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
