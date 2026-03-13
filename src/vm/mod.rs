@@ -17,11 +17,13 @@ pub struct Vm {
     pub data_stack: DataStack,
     pub output: String,
     pub mode: VmMode,
+    pub compile_buffer: Vec<OpCode>,
 }
 
 impl Vm {
     pub fn new() -> Self {
         Self {
+            compile_buffer: Vec::new(),
             data_stack: DataStack::new(),
             output: String::new(),
             mode: VmMode::Interpret,
@@ -34,12 +36,12 @@ impl Vm {
             self.output = String::new();
         }
 
-        for code in codes.iter(){
+        for code in codes {
 
             match self.mode {
                 VmMode::Compile => {
                     
-                    if let OpCode::ExecuteBuiltIn(bi) = code {
+                    if let OpCode::ExecuteBuiltIn(bi) = &code {
                         if bi.flags.has(BuiltInFlags::DEFINING) {
                             return Err("nested definitions are not supported".to_string());
                         } else if bi.flags.has(BuiltInFlags::IMMEDIATE) {
@@ -48,13 +50,13 @@ impl Vm {
                         }
                     }
 
-                    println!("Compiled: {:?}", code);
+                    self.compile_buffer.push(code);
                     continue;
                 },
 
                 VmMode::Interpret => {
                     match code {
-                        OpCode::Push(u) => self.data_stack.push(*u)?,
+                        OpCode::Push(u) => self.data_stack.push(u)?,
                         OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
                         OpCode::NotFound(s) => return Err(format!("{} not found", s)),
                     }
