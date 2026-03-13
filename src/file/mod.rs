@@ -1,11 +1,10 @@
 use std::fs;
+use std::io::{self, Write};
 use std::io::{BufRead, BufReader};
 
 use crate::vm::lexer::Lexer;
 use crate::vm::emitter::Emitter;
 use crate::vm::Vm;
-
-const MSG_ERROR: &str = "rfi error:";
 
 pub struct File;
 
@@ -28,8 +27,14 @@ impl File {
 
             // run opcodes in vm
             match vm.run(codes) {
-                Ok(()) => (),
-                Err(msg) => println!("\n{} {}", MSG_ERROR, msg),
+                Ok(()) => {
+                    if !vm.output.is_empty() {
+                        print!("{}", vm.output);
+                        io::stdout().flush().unwrap();
+                    }
+                },
+
+                Err(msg) => return Err(msg),
             }
         }
 
