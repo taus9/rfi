@@ -1,14 +1,14 @@
-use crate::builtin::{BuiltIn, BuiltInFn};
+use crate::builtin::{BuiltIn};
 
 pub enum Word {
-    BuiltIn(BuiltInFn),
+    BuiltIn(BuiltIn),
     Integer(u64),
     NotFound(String),
 }
 
 impl Word {
     pub fn from(word: String) -> Self {
-        if let Some(func) = BuiltIn::get_func(&word) {
+        if let Some(func) = BuiltIn::get(&word) {
             return Word::BuiltIn(func);
         }
 

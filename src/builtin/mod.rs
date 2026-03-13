@@ -4,13 +4,22 @@ use crate::vm::Vm;
 
 pub type BuiltInFn = fn(&mut Vm) -> Result<(), String>;
 
-pub struct BuiltIn;
+pub struct BuiltInFlags(u32);
 
-impl BuiltIn {
-
-    pub fn get_func(word: &str) -> Option<BuiltInFn> {
-        core::get_func(word)
-        // .or_else(|| core_ext::get_func(word))
-    }
+impl BuiltInFlags {
+    pub const NONE:      Self = Self(0);
+    pub const IMMEDIATE: Self = Self(1 << 0);
+    pub const HIDDEN:    Self = Self(1 << 1);
 }
 
+pub struct BuiltIn {
+    pub flags: BuiltInFlags,
+    pub func:  BuiltInFn,
+}
+
+impl BuiltIn {
+    pub fn get(word: &str) -> Option<BuiltIn> {
+        core::get(word)
+        // .or_else(|| core_ext::get(word))
+    }
+}

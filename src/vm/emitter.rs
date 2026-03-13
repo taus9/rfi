@@ -14,7 +14,7 @@ impl Emitter {
     fn transform(word: Word) -> OpCode {
         match word {
             Word::Integer(u) => OpCode::Push(u),
-            Word::BuiltIn(f) => OpCode::Execute(f),
+            Word::BuiltIn(f) => OpCode::ExecuteBuiltIn(f),
             Word::NotFound(s) =>OpCode::NotFound(s),
         }
     }

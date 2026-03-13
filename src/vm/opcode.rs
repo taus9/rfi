@@ -1,7 +1,7 @@
-use crate::builtin::BuiltInFn;
+use crate::builtin::BuiltIn;
 
 pub enum OpCode {
     Push(u64),
-    Execute(BuiltInFn),
+    ExecuteBuiltIn(BuiltIn),
     NotFound(String),
 }

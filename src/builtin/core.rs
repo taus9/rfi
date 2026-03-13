@@ -1,4 +1,7 @@
-use crate::{builtin::BuiltInFn, vm::Vm};
+use crate::{
+    builtin::{BuiltIn, BuiltInFlags},
+    vm::Vm
+};
 
 
 fn add(vm: &mut Vm) -> Result<(), String> {
@@ -21,11 +24,11 @@ fn dot(vm: &mut Vm) -> Result<(), String> {
     Ok(())
 }
 
-pub fn get_func(word: &str) -> Option<BuiltInFn> {
+pub fn get(word: &str) -> Option<BuiltIn> {
     match word {
-        "+" => Some(add),
-        "-" => Some(sub),
-        "." => Some(dot),
+        "+" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: add }),
+        "-" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: sub }),
+        "." => Some(BuiltIn { flags: BuiltInFlags::NONE, func: dot }),
         _ => None,  // Fallback for unknown builtins
     }
 }
