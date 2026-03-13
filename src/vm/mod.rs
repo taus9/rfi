@@ -61,7 +61,7 @@ impl Vm {
                         OpCode::NotFound(s) => return Err(format!("{} not found", s)),
                     }
                 },
-            };
+            }
 
         }
 
