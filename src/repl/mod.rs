@@ -5,7 +5,7 @@ use std::io::{self, Write};
 
 use crate::vm::lexer::Lexer;
 use crate::vm::emitter::Emitter;
-use crate::vm::Vm;
+use crate::vm::{Vm, VmMode};
 
 pub struct Repl;
 
@@ -15,6 +15,7 @@ const QUIT: &str = "quit";
 
 const MSG_ERROR: &str = "rfi error:";
 const MSG_OK: &str = "ok";
+const MSG_COMPILE: &str = "compiled";
 
 
 impl Repl {
@@ -36,6 +37,7 @@ impl Repl {
 
             if input.trim() == "" {
                 println!();
+                continue;
             }
 
             // TODO: make quit into an OpCode
@@ -58,7 +60,13 @@ impl Repl {
                     if !vm.output.is_empty() {
                         print!("{}", &vm.output);
                     }
-                    print!(" {}\n", MSG_OK);
+                    
+                    let msg = match vm.mode {
+                        VmMode::Compile => MSG_COMPILE,
+                        VmMode::Interpret => MSG_OK,
+                    };
+
+                    print!(" {}\n", msg);
                     io::stdout().flush().unwrap();
                 }
                 Err(msg) => println!("\n{} {}", MSG_ERROR, msg),
