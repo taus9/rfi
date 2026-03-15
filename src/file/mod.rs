@@ -16,8 +16,9 @@ impl File {
 
         for line in &lines {
             // get words from lexer
-            let words = Lexer::tokenize(line)?;
-
+            // the tokenizers need to be passed the vm's dictionary
+            // in order to be able to look for user defined words
+            let words = Lexer::tokenize(line, &vm.dictionary)?;
 
             if words.is_empty() {
                 continue;

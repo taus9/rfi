@@ -1,10 +1,11 @@
-use crate::builtin::BuiltIn;
+use crate::{builtin::BuiltIn};
 
 #[derive(Debug)]
 pub enum OpCode {
     Push(u64),
     ExecuteBuiltIn(BuiltIn),
     NotFound(String),
-    Define(String),
+    Define(String, BuiltIn),
     EndDefine(),
+    CallUserWord(String),
 }

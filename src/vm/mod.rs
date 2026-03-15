@@ -7,6 +7,7 @@ pub mod word;
 use crate::builtin::BuiltInFlags;
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
+use crate::defined::UserDefinedWord;
 
 pub enum VmMode {
     Compile,
@@ -19,6 +20,7 @@ pub struct Vm {
     pub mode: VmMode,
     pub compile_buffer: Vec<OpCode>,
     pub compiling_word: String,
+    pub dictionary: Vec<UserDefinedWord>,
 }
 
 impl Vm {
@@ -29,6 +31,7 @@ impl Vm {
             output: String::new(),
             mode: VmMode::Interpret,
             compiling_word: String::new(),
+            dictionary: Vec::new(),
         }
     }
 
@@ -57,13 +60,34 @@ impl Vm {
                 VmMode::Interpret => match code {
                     OpCode::Push(u) => self.data_stack.push(u)?,
                     OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
-                    OpCode::NotFound(s) => return Err(format!("{} not found", s)),
-                    OpCode::Define(s) => self.compiling_word = s,
+                    OpCode::Define(s, bi) => {
+                        self.compiling_word = s;
+                        (bi.func)(self)?
+                    },
                     OpCode::EndDefine() => (),
+                    OpCode::NotFound(s) => {
+                        
+                        return Err(format!("{} not found", s));
+                    },
+                    
+                    OpCode::CallUserWord(s) => {
+                        let udw = self.get_user_word(&s);
+                        self.run(udw.read_codes());
+                    },
                 },
             }
         }
 
         Ok(())
     }
+
+    pub fn register_user_word(&mut self, name: String, codes: Vec<OpCode>) {
+        let word = UserDefinedWord::new(name, codes);
+        self.dictionary.push(word);
+    }
+
+    pub fn get_user_word(&self, name: &str) -> &UserDefinedWord {
+        self.dictionary.iter().find(|w| w.read_name() == name).unwrap()      
+    }
+    
 }

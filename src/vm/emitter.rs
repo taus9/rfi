@@ -1,3 +1,4 @@
+use crate::builtin::core::get_colon_function;
 use crate::vm::opcode::OpCode;
 use crate::vm::word::Word;
 
@@ -13,7 +14,8 @@ impl Emitter {
             Word::Integer(u) => OpCode::Push(u),
             Word::BuiltIn(f) => OpCode::ExecuteBuiltIn(f),
             Word::NotFound(s) => OpCode::NotFound(s),
-            Word::Define(s) => OpCode::Define(s),
+            Word::Define(s) => OpCode::Define(s, get_colon_function()),
+            Word::CallUserWord(w) => OpCode::CallUserWord(w),
         }
     }
 }

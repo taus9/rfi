@@ -7,6 +7,7 @@ mod builtin;
 mod file;
 mod repl;
 mod vm;
+mod defined;
 
 const RFI_VERSION: &str = "rusty forth interpreter 0.1.0";
 

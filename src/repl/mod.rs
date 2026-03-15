@@ -46,7 +46,7 @@ impl Repl {
             }
 
             // get words from lexer
-            let words = Lexer::tokenize(&input);
+            let words = Lexer::tokenize(&input, &vm.dictionary);
             if let Err(e)  = words {
                 eprintln!("{}", e);
                 break;

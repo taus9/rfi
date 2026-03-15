@@ -1,19 +1,16 @@
 use crate::vm::word::Word;
+use crate::defined::UserDefinedWord;
 
 pub struct Lexer;
 
 impl Lexer {
-    pub fn tokenize(input: &str) -> Result<Vec<Word>, String> {
+    pub fn tokenize(input: &str, dictionary: &Vec::<UserDefinedWord>) -> Result<Vec<Word>, String> {
         let bytes = input.as_bytes();
         let mut pos = 0;
         let mut words = Vec::<Word>::new();
         loop {
             match Self::next_token(bytes, &mut pos) {
                 Some(word) => {
-                    // if we come across the ":" word when we are tokenizing/parsing
-                    // when need to convert the very next word into a TextWord
-                    // this new TextWord is the name of the function being defined 
-                    // and this is what it will be looked up by.
                     if word == ":" {
                         let word_name = Self::next_token(bytes, &mut pos);
                         if word_name.is_none() {
@@ -25,7 +22,7 @@ impl Lexer {
                         continue;
                     }
 
-                    words.push(Word::from(word))
+                    words.push(Word::from(word, dictionary));
                 }
                 None => break,
             }
