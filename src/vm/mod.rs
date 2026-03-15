@@ -64,7 +64,6 @@ impl Vm {
                         self.compiling_word = s;
                         (bi.func)(self)?
                     },
-                    OpCode::EndDefine() => (),
                     OpCode::NotFound(s) => {
                         
                         return Err(format!("{} not found", s));
@@ -72,7 +71,9 @@ impl Vm {
                     
                     OpCode::CallUserWord(s) => {
                         let udw = self.get_user_word(&s);
-                        self.run(udw.read_codes());
+                        let code = udw.read_codes();
+
+                        self.run(code.clone())?;
                     },
                 },
             }

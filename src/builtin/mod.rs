@@ -4,7 +4,7 @@ use crate::vm::Vm;
 
 pub type BuiltInFn = fn(&mut Vm) -> Result<(), String>;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BuiltInFlags(u32);
 
 impl BuiltInFlags {
@@ -17,7 +17,7 @@ impl BuiltInFlags {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BuiltIn {
     pub flags: BuiltInFlags,
     pub func: BuiltInFn,
