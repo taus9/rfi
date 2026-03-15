@@ -1,7 +1,6 @@
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::terminal;
 
-use std::f32::consts::E;
 use std::io::{self, Write};
 
 use crate::vm::emitter::Emitter;

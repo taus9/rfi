@@ -21,8 +21,4 @@ impl UserDefinedWord {
     pub fn read_codes(&self) -> &Vec<OpCode> {
         &self.codes
     }
-
-    pub fn clone_codes(&self) -> Vec<OpCode> {
-        self.codes.clone()
-    }
 }
