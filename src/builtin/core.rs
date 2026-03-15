@@ -35,11 +35,26 @@ fn dot(vm: &mut Vm) -> Result<(), String> {
 
 pub fn get(word: &str) -> Option<BuiltIn> {
     match word {
-        "+" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: add }),
-        "-" => Some(BuiltIn { flags: BuiltInFlags::NONE, func: sub }),
-        "." => Some(BuiltIn { flags: BuiltInFlags::NONE, func: dot }),
-        ":" => Some(BuiltIn { flags: BuiltInFlags::DEFINING, func: colon }),
-        ";" => Some(BuiltIn { flags: BuiltInFlags::IMMEDIATE, func: semicolon }),
-        _ => None,  // Fallback for unknown builtins
+        "+" => Some(BuiltIn {
+            flags: BuiltInFlags::NONE,
+            func: add,
+        }),
+        "-" => Some(BuiltIn {
+            flags: BuiltInFlags::NONE,
+            func: sub,
+        }),
+        "." => Some(BuiltIn {
+            flags: BuiltInFlags::NONE,
+            func: dot,
+        }),
+        ":" => Some(BuiltIn {
+            flags: BuiltInFlags::DEFINING,
+            func: colon,
+        }),
+        ";" => Some(BuiltIn {
+            flags: BuiltInFlags::IMMEDIATE,
+            func: semicolon,
+        }),
+        _ => None, // Fallback for unknown builtins
     }
 }

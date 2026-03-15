@@ -1,5 +1,5 @@
 pub struct DataStack {
-    stack: Vec<u64>
+    stack: Vec<u64>,
 }
 
 impl DataStack {
@@ -15,7 +15,8 @@ impl DataStack {
     }
 
     pub fn pop(&mut self) -> Result<u64, String> {
-        self.stack.pop().ok_or_else(|| "Stack underflow".to_string())
+        self.stack
+            .pop()
+            .ok_or_else(|| "Stack underflow".to_string())
     }
-
 }

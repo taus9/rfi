@@ -1,10 +1,10 @@
-pub mod lexer;
 pub mod data_stack;
-pub mod word;
 pub mod emitter;
+pub mod lexer;
 pub mod opcode;
+pub mod word;
 
-use crate::builtin::{BuiltInFlags};
+use crate::builtin::BuiltInFlags;
 use crate::vm::data_stack::DataStack;
 use crate::vm::opcode::OpCode;
 
@@ -31,16 +31,13 @@ impl Vm {
     }
 
     pub fn run(&mut self, codes: Vec<OpCode>) -> Result<(), String> {
-
         if !self.output.is_empty() {
             self.output = String::new();
         }
 
         for code in codes {
-
             match self.mode {
                 VmMode::Compile => {
-                    
                     if let OpCode::ExecuteBuiltIn(bi) = &code {
                         if bi.flags.has(BuiltInFlags::DEFINING) {
                             return Err("nested definitions are not supported".to_string());
@@ -52,19 +49,18 @@ impl Vm {
 
                     self.compile_buffer.push(code);
                     continue;
-                },
+                }
 
-                VmMode::Interpret => {
-                    match code {
-                        OpCode::Push(u) => self.data_stack.push(u)?,
-                        OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
-                        OpCode::NotFound(s) => return Err(format!("{} not found", s)),
-                    }
+                VmMode::Interpret => match code {
+                    OpCode::Push(u) => self.data_stack.push(u)?,
+                    OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
+                    OpCode::NotFound(s) => return Err(format!("{} not found", s)),
+                    OpCode::BeginDefine() => (),
+                    OpCode::EndDefine() => (),
                 },
             }
-
         }
 
         Ok(())
-    }  
+    }
 }

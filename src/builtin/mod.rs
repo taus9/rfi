@@ -8,10 +8,10 @@ pub type BuiltInFn = fn(&mut Vm) -> Result<(), String>;
 pub struct BuiltInFlags(u32);
 
 impl BuiltInFlags {
-    pub const NONE:      Self = Self(0);
+    pub const NONE: Self = Self(0);
     pub const IMMEDIATE: Self = Self(1 << 0);
-    pub const DEFINING:    Self = Self(1 << 1);
-    
+    pub const DEFINING: Self = Self(1 << 1);
+
     pub fn has(&self, flag: BuiltInFlags) -> bool {
         self.0 & flag.0 != 0
     }
@@ -20,7 +20,7 @@ impl BuiltInFlags {
 #[derive(Debug)]
 pub struct BuiltIn {
     pub flags: BuiltInFlags,
-    pub func:  BuiltInFn,
+    pub func: BuiltInFn,
 }
 
 impl BuiltIn {

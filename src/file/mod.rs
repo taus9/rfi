@@ -2,14 +2,13 @@ use std::fs;
 use std::io::{self, Write};
 use std::io::{BufRead, BufReader};
 
-use crate::vm::lexer::Lexer;
-use crate::vm::emitter::Emitter;
 use crate::vm::Vm;
+use crate::vm::emitter::Emitter;
+use crate::vm::lexer::Lexer;
 
 pub struct File;
 
 impl File {
-
     pub fn run(file: String) -> Result<(), String> {
         let lines = Self::read_file(&file)?;
 
@@ -32,7 +31,7 @@ impl File {
                         print!("{}", vm.output);
                         io::stdout().flush().unwrap();
                     }
-                },
+                }
 
                 Err(msg) => return Err(msg),
             }
@@ -51,8 +50,7 @@ impl File {
             .lines()
             .flatten()
             .collect::<Vec<String>>();
-        
+
         Ok(lines)
     }
-
 }

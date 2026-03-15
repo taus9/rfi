@@ -1,4 +1,4 @@
-use crate::builtin::{BuiltIn};
+use crate::builtin::BuiltIn;
 
 pub enum Word {
     BuiltIn(BuiltIn),

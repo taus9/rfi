@@ -3,13 +3,9 @@ pub struct Args {
     pos: usize,
 }
 
-
 impl Args {
     pub fn new(args: Vec<String>) -> Self {
-        Self {
-            args,
-            pos: 0,
-        }
+        Self { args, pos: 0 }
     }
 
     pub fn next_arg(&mut self) -> Option<String> {
