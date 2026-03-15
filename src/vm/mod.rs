@@ -18,6 +18,7 @@ pub struct Vm {
     pub output: String,
     pub mode: VmMode,
     pub compile_buffer: Vec<OpCode>,
+    pub compiling_word: String,
 }
 
 impl Vm {
@@ -27,6 +28,7 @@ impl Vm {
             data_stack: DataStack::new(),
             output: String::new(),
             mode: VmMode::Interpret,
+            compiling_word: String::new(),
         }
     }
 
@@ -38,6 +40,7 @@ impl Vm {
         for code in codes {
             match self.mode {
                 VmMode::Compile => {
+
                     if let OpCode::ExecuteBuiltIn(bi) = &code {
                         if bi.flags.has(BuiltInFlags::DEFINING) {
                             return Err("nested definitions are not supported".to_string());
@@ -55,7 +58,7 @@ impl Vm {
                     OpCode::Push(u) => self.data_stack.push(u)?,
                     OpCode::ExecuteBuiltIn(bi) => (bi.func)(self)?,
                     OpCode::NotFound(s) => return Err(format!("{} not found", s)),
-                    OpCode::BeginDefine() => (),
+                    OpCode::Define(s) => self.compiling_word = s,
                     OpCode::EndDefine() => (),
                 },
             }

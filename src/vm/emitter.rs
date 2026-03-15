@@ -13,6 +13,7 @@ impl Emitter {
             Word::Integer(u) => OpCode::Push(u),
             Word::BuiltIn(f) => OpCode::ExecuteBuiltIn(f),
             Word::NotFound(s) => OpCode::NotFound(s),
+            Word::Define(s) => OpCode::Define(s),
         }
     }
 }

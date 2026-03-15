@@ -16,7 +16,9 @@ impl File {
 
         for line in &lines {
             // get words from lexer
-            let words = Lexer::tokenize(line);
+            let words = Lexer::tokenize(line)?;
+
+
             if words.is_empty() {
                 continue;
             }

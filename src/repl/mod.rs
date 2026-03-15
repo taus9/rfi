@@ -1,6 +1,7 @@
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::terminal;
 
+use std::f32::consts::E;
 use std::io::{self, Write};
 
 use crate::vm::emitter::Emitter;
@@ -46,6 +47,12 @@ impl Repl {
 
             // get words from lexer
             let words = Lexer::tokenize(&input);
+            if let Err(e)  = words {
+                eprintln!("{}", e);
+                break;
+            }
+
+            let words = words.unwrap();
             if words.is_empty() {
                 return;
             }
